@@ -10,7 +10,7 @@ exports.getAllCodeLabs = async(req, res, next) => {
   
     let codeLabs = [];
     try{
-    codeLabs = await CodeLab.find({courseId}).select("codeLabId").select("courseName").select("startTime").select("endTime")
+    codeLabs = await CodeLab.find({courseId}).select("codeLabId").select("courseName").select("startTime").select("endTime").select("date")
     .select("courseId");
 
     }
@@ -25,10 +25,10 @@ exports.getAllCodeLabs = async(req, res, next) => {
     })
 }
 exports.createCodeLab = async (req, res, next) => {
-    const { codeLabId, startTime , endTime,courseName, courseId} = req.body;
+    const { codeLabId, startTime , endTime,courseName, courseId, date} = req.body;
 
 
-    if (!codeLabId||!startTime||!endTime||!courseName||!courseId) {
+    if (!codeLabId||!startTime||!endTime||!courseName||!courseId||!date) {
       //sending error
      return next(new ErrorResponse("please provide an (startTime/ codeLabId/endTime/courseName/courseId)", 400));
     }
@@ -40,7 +40,8 @@ exports.createCodeLab = async (req, res, next) => {
         startTime,
         endTime,
         courseName,
-        courseId
+        courseId,
+        date
       });
   
      res.status(200).json({

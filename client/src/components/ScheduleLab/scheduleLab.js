@@ -1,24 +1,27 @@
 import React ,{useState} from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Box from '@mui/material/Box';
+import TimePicker from 'react-time-picker';
 import { ToastContainer,toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import DatePicker from "react-datepicker";
+import "./style.css";
+import "react-datepicker/dist/react-datepicker.css";
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
+import uuid from 'react-uuid';
 
-export default function ScheduleCodeLab() {
+export default function ScheduleCodeLab({courseId, courseName}) {
   const [open, setOpen] = React.useState(false);  
   const [errors, setErrors] = useState("");
-  const [courseName, setCourseName] = useState("");
-  const [courseInfo, setCourseInfo] = useState("");
+  const [startTime, setStartTime] = useState('10:00');
+  const [endTime, setEndTime] = useState('10:00');
+  const [date, setDate] = useState("");
+
   const popError = (errorMessage) => {
 
     toast.error(errorMessage, {
@@ -28,9 +31,10 @@ export default function ScheduleCodeLab() {
   }
   const addNewLab = async (e) => {
     e.preventDefault();
-
+      console.log(date, startTime, endTime, courseId, courseName);
+      
     //validation
-    if(!courseName || !courseInfo ){
+    if(!date || !startTime ||!endTime ){
       setErrors("Please enter required details");
       return;
     }
@@ -46,21 +50,23 @@ export default function ScheduleCodeLab() {
 
     try {
       const { data } = await axios.post(
-        "/api/course/addCourses",
-        {courseName, courseInfo },
+        "/api/codelab/addCodeLab",
+        {codeLabId:uuid(),date, courseName, courseId, startTime, endTime },
         config
       );
      console.log("data",data);
     } catch (error) {
       popError(error.response.data.error);
-      setCourseName("");
-      setCourseInfo("");
+      setStartTime("");
+      setEndTime("");
+      setDate("");
       return;
     }
-    setCourseName("");
-    setCourseInfo("");
+    setStartTime("");
+    setEndTime("");
+    setDate("");
 
-    toast.success("Course Added", {
+    toast.success("Lab Sceduled", {
         className :"success-toast",
         position:toast.POSITION.BOTTOM_RIGHT
       });
@@ -75,6 +81,7 @@ export default function ScheduleCodeLab() {
   const handleClose = () => {
     setOpen(false);
   };
+  const newdate = new Date();
 
   return (
     <div>
@@ -82,50 +89,20 @@ export default function ScheduleCodeLab() {
         <Button variant="outlined" sx={{marginBottom:"1rem", marginRight:"1rem"}} onClick={handleClickOpen}>
     Schedule Lab
       </Button>
-      <Dialog open={open}>
-        <DialogTitle>Schedule Lab</DialogTitle>
+      <Dialog open={open} >
+        <DialogTitle 
+        >Schedule Lab</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To add new code lab to this course, please enter date and select start and end timing for lecture.
-          </DialogContentText>
-          <Box
-      component="form"
-      sx={{
-        'display':'flex',
-        'boxSizing':'border-box',
-        'width':'100%',
-        'justifyContent':'space-between',
-        'flexWrap':'wrap',
-        '& > :not(style)': { m: 1, width: '45%' },
-
-      }}
-      noValidate
-      autoComplete="off"
-    >  
+              <div className="lab-schedule">
+         <p>Schedule Date :</p>       
+         <DatePicker selected={date} onChange={(date) => setDate(date)}></DatePicker>
          
-    <TextField
-    margin="normal"
-    required
-    fullWidth
-    id="courseName"
-    label="Course Name"
-    name="courseName"
-    autoComplete="courseName"
-    autoFocus
-    value={courseName} onChange={(e)=>setCourseName(e.target.value)}
-  />
-      <TextField
-    margin="normal"
-    required
-    fullWidth
-    id="courseInfo"
-    label="Course Info"
-    name="courseInfo"
-    autoComplete="courseInfo"
-    autoFocus
-    value={courseInfo} onChange={(e)=>setCourseInfo(e.target.value)}
-  />
-    </Box>
+         <p>Start Time :</p>    
+         <TimePicker onChange={setStartTime} value={startTime} />
+         
+         <p>End Time :</p>    
+         <TimePicker onChange={setEndTime} value={endTime} />
+              </div>
     
   {errors && <span>{errors}</span>}
         </DialogContent>

@@ -102,7 +102,7 @@ const CourseInfo = ({history, match}) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-      <CodeLabs role ={role} courseId = {match.params.courseId}></CodeLabs>      </TabPanel>
+      <CodeLabs role ={role} courseId = {match.params.courseId} courseName ={course.courseName}></CodeLabs>      </TabPanel>
       <TabPanel value={value} index={1}>
         Study material
       </TabPanel>

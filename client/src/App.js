@@ -7,6 +7,7 @@ import Private from './routes/private';
 import RegisterMember from './components/register/register';
 import Courses from './components/Courses/course'
 import CourseInfo from './components/courseInfo/courseInfo';
+import StudyMaterial from './components/StudyMaterial/studyMaterial';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Private exact path="/course" component ={Courses}></Private>
         <Private exact path="/register" component ={RegisterMember}></Private>
         <Private exact path="/course/:courseId" component ={CourseInfo}></Private>
+        <Private exact path="/studyMaterial" component ={StudyMaterial}></Private>
         </Switch>
     </div>
   );

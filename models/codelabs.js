@@ -24,12 +24,15 @@ const CodeLabSchema = new mongoose.Schema({
         select:false,
 
     },
+    date:{
+   type:Date
+    },
     startTime:{
-        type:Date,
+        type:String,
         required:[true,"Please enter start time"]
     },
     endTime:{
-        type:Date,
+        type:String,
         required:[true,"Please enter end time"]
     },
     

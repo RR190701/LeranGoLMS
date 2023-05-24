@@ -90,6 +90,16 @@ const classes = useStyles();
 
           </ListItem>
           :null}
+                    {(role === "Admin")?
+      <ListItem key="Study Material" disablePadding className ="listbutton">
+        <NavLink to ="/studyMaterial">            
+        <ListItemButton >
+              <ListItemText primary="Study Material" />
+            </ListItemButton>
+            </NavLink>
+
+          </ListItem>
+          :null}
                   <ListItem key="Courses" disablePadding className ="listbutton">
                   <NavLink to ="/course">            
         <ListItemButton >

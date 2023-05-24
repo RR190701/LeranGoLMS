@@ -5,8 +5,8 @@ import './style.css';
 import ScheduleCodeLab from '../ScheduleLab/scheduleLab';
 
 const drawerWidth = 220;
-const CodeLab = ({history, courseId, role, courseName}) => {
-    const[codelabs, setCodeLabs] = useState([]);
+const TrainingMaterial = ({history, courseId}) => {
+    const[trainingMaterial, setMaterial] = useState([]);
 
 
     useEffect(() => {
@@ -22,8 +22,8 @@ const CodeLab = ({history, courseId, role, courseName}) => {
           };
         try {
               const { data } = await axios.get(`/api/codelab/getAllCodeLabs/${courseId}`, config);
-              console.log("codelabs",data);   
-              setCodeLabs(data.res);  
+              console.log("trainingMaterial",data);   
+              setMaterial(data.res);  
             
             } 
             catch (error) {
@@ -35,20 +35,13 @@ const CodeLab = ({history, courseId, role, courseName}) => {
         },[history]);
     return (
         <>
-        <ScheduleCodeLab courseId ={courseId} courseName ={courseName}></ScheduleCodeLab>
-<div className='codelabs-div'>
+<div className='trainingMaterial-div'>
     
-    {codelabs && codelabs.map(({_id,courseId, courseName, startTime, endTime, codeLabId, date}) =>(
+    {trainingMaterial && trainingMaterial.map(({_id,courseId, fileName}) =>(
+     <div>
+         {fileName}
+    </div>
 
-    <CodeLabCard key ={_id} courseId ={courseId}
-    courseName = {courseName}
-    date = {date}
-    startTime= {startTime}
-    role = {role}
-    username={ localStorage.getItem("username")}
-    endTime = {endTime}
-    codeLabId = {codeLabId}>
-    </CodeLabCard>
     ))}
 </div>
 </>
@@ -56,4 +49,4 @@ const CodeLab = ({history, courseId, role, courseName}) => {
      );
 }
  
-export default CodeLab;
+export default TrainingMaterial;
